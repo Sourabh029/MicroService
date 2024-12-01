@@ -26,6 +26,7 @@ public class ProductService {
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .id(UUID.randomUUID().toString())
+
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
                 .price(productRequest.getPrice())
@@ -47,7 +48,17 @@ public class ProductService {
     public ProductResponse getProducts(String id) {
         Product product = productRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("resource not found with ID = "+id,"Produt Service"));
 
-        return modelMapper.map(product, ProductResponse.class);
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setId(product.getId());
+        productResponse.setName(product.getName());
+        productResponse.setPrice(product.getPrice());
+        productResponse.setDescription(product.getDescription());
+
+        //return productResponse;
+
+
+        ProductResponse map = modelMapper.map(product, ProductResponse.class);
+        return map;
 
     }
 }
